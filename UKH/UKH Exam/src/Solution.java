@@ -32,7 +32,6 @@ class Result {
             // Move pointer for rearranged array
             j++;
         }
-
         return greatness;
     }
 }
