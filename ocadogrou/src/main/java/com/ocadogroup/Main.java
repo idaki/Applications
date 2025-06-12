@@ -6,8 +6,14 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         Map<String, Set<String>> inputTokensMap = readInput();
-        Map<String, Set<String>> outpuTokenstMap = buildDependenciesMap(inputTokensMap);
-        printDependencies(outpuTokenstMap);
+        Map<String, Set<String>> outputTokensMap = buildDependenciesMap(inputTokensMap);
+        printDependencies(outputTokensMap);
+
+        System.out.println("\n==OPTIONAL Inverse Dependencies ==");
+        Map<String, Set<String>> inverseMap = buildInverseDependencyMap(inputTokensMap);
+        Map<String, Set<String>> inverseDepsMap = buildDependenciesMap(inverseMap);
+        printDependencies(inverseDepsMap);
+
     }
 
     private static Map<String, Set<String>> readInput() {
@@ -58,6 +64,19 @@ public class Main {
             }
         }
         return result;
+    }
+
+    private static Map<String, Set<String>> buildInverseDependencyMap(Map<String, Set<String>> inputMap) {
+        Map<String, Set<String>> inverseMap = new HashMap<>();
+
+        for (Map.Entry<String, Set<String>> entry : inputMap.entrySet()) {
+            String from = entry.getKey();
+            for (String to : entry.getValue()) {
+                inverseMap.computeIfAbsent(to, k -> new HashSet<>()).add(from);
+            }
+        }
+
+        return inverseMap;
     }
 
     private static void printDependencies(Map<String, Set<String>> outpuTokenstMap) {
